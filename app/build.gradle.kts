@@ -75,7 +75,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.dhis2"
+        applicationId = "com.dhis2.gapi"
         compileSdk = libs.versions.sdk.get().toInt()
         targetSdk = libs.versions.sdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
@@ -158,21 +158,21 @@ android {
 
     productFlavors {
         create("dhis") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.gapi"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
         }
 
         create("dhisPlayServices") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.gapi"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
         }
 
         create("dhisUITesting") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.gapi"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
@@ -245,6 +245,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":viewpagerdotsindicator"))
     implementation(project(":dhis_android_analytics"))
+    implementation(project(":gapi"))
     implementation(project(":form"))
     implementation(project(":commons"))
     implementation(project(":dhis2_android_maps"))

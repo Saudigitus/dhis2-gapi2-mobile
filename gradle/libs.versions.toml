@@ -5,6 +5,7 @@ vCode = "140"
 vName = "3.1.1.1"
 gradle = "8.7.2"
 kotlin = '2.0.21'
+ksp = "2.0.21-1.0.28"
 hilt = '2.47'
 jacoco = '0.8.10'
 designSystem = "0.4.1"
@@ -84,6 +85,7 @@ uiautomator = "2.2.0"
 maplibre = "10.2.0"
 material3WindowSize = "1.2.0"
 material3AdaptiveAndroid = "1.0.0"
+navigationCompose = "2.6.0"
 [libraries]
 gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlinPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -202,8 +204,10 @@ dispatcher-dispatchBOM = { group = "com.rickbusarow.dispatch", name = "dispatch-
 dispatcher-dispatchCore = { group = "com.rickbusarow.dispatch", name = "dispatch-core" }
 dispatcher-dispatchEspresso = { group = "com.rickbusarow.dispatch", name = "dispatch-android-espresso", version = "1.0.0-beta10" }
 deprecated-autoValueParcel = { group = "com.ryanharter.auto.value", name = "auto-value-parcel", version.ref = "autovalueparcel" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 [plugins]
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 [bundles]
 uicomponents-implementation = ["androidx-coreKtx", "androidx-material3", "androidx-material3-window","androidx-material3-adaptative-android", "androidx-material3-adaptative-android", "google-material", "lottie-compose", "dhis2-mobile-designsystem"]
 uicomponents-api = ["dhis2-mobile-designsystem", "androidx-compose-constraintlayout", "androidx-compose-preview", "androidx-compose-ui", "google-material3-themeadapter"]
