@@ -4,18 +4,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -24,22 +19,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import org.dhis2.commons.Constants
-
 import org.saudigitus.gapi.R
+import org.saudigitus.gapi.presentation.components.DropDown
 import org.saudigitus.gapi.presentation.components.DropDownOu
+import org.saudigitus.gapi.presentation.components.TEIList
 import org.saudigitus.gapi.presentation.components.Toolbar
 import org.saudigitus.gapi.presentation.components.ToolbarActionState
 import org.saudigitus.gapi.presentation.models.FilterType
 
 @Composable
 fun HomeRoute(
-    isExpandedScreen: Boolean,
     viewModel: HomeViewModel,
     navController: NavHostController,
     navBack: () -> Unit,
@@ -47,7 +40,7 @@ fun HomeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeUI(isExpandedScreen, uiState = uiState) {
+    HomeUI(uiState = uiState) {
         when (it) {
             is HomeUiEvent.OnBack -> navBack()
             is HomeUiEvent.NavTo -> navController.navigate(it.route)
@@ -62,7 +55,6 @@ fun HomeRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeUI(
-    isExpandedScreen: Boolean,
     uiState: HomeUiState,
     onEvent: (HomeUiEvent) -> Unit,
 ) {
@@ -106,12 +98,20 @@ fun HomeUI(
                     DropDownOu(
                         placeholder = stringResource(R.string.ou),
                         leadingIcon = Icons.Default.AccountTree,
-                        selectedSchool = uiState.orgUnit,
+                        selectedOu = uiState.orgUnit,
                         program = uiState.program,
                         onItemClick = {
                             onEvent(HomeUiEvent.OnFilterChange(FilterType.OU, it))
                         },
                     )
+
+                    DropDown(
+                        placeholder = stringResource(R.string.project),
+                        leadingIcon = Icons.Default.Task,
+                        data = uiState.projects
+                    ) {
+
+                    }
                 }
             }
 
@@ -131,26 +131,11 @@ fun HomeUI(
                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top),
                 horizontalAlignment = Alignment.Start,
             ) {
-               // TODO: Add selected filter info
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    item {
-                        HomeItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = painterResource(R.drawable.ic_project),
-                            title = "20 Project",
-                            label = stringResource(R.string.calendar),
-                            enabled = true,
-                            onClick = {
-
-                            },
-                        )
-                    }
-                }
+                TEIList(
+                    teiCardMapper = uiState.teiCardMapper,
+                    teis = uiState.teis,
+                    onCardClick = { tei, enrollment -> onEvent(HomeUiEvent.OnTeiClick(tei, enrollment)) }
+                )
             }
         }
     }

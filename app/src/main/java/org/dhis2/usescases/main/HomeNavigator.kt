@@ -12,6 +12,7 @@ import org.dhis2.usescases.main.program.ProgramUiModel
 import org.dhis2.usescases.programEventDetail.ProgramEventDetailActivity
 import org.dhis2.usescases.searchTrackEntity.SearchTEActivity
 import org.hisp.dhis.android.core.program.ProgramType
+import org.saudigitus.gapi.presentation.GapiActivity
 
 sealed class HomeItemData(
     open val uid: String,
@@ -104,7 +105,7 @@ fun ActivityResultLauncher<Intent>.navigateTo(context: Context, homeItemData: Ho
                 }
             } else {
                 bundle.putString(Constants.TRACKED_ENTITY_UID, homeItemData.trackedEntityType)
-                Intent(context, SearchTEActivity::class.java).apply {
+                Intent(context, GapiActivity::class.java).apply {
                     putExtras(bundle)
                     launch(this)
                 }

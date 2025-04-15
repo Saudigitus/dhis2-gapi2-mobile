@@ -24,22 +24,17 @@ class GapiActivity : FragmentActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+
         setContent {
-            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
-            val isExpandedScreen = (widthSizeClass == WindowWidthSizeClass.Medium) || (widthSizeClass == WindowWidthSizeClass.Expanded)
             val navController = rememberNavController()
-            viewModel.initProgram(intent.getStringExtra("program") ?: "")
 
             GapiAndroidTheme(
                 dynamicColor = false,
                 darkTheme = false,
             ) {
                 HomeRoute(
-                    isExpandedScreen = isExpandedScreen,
                     viewModel = viewModel,
                     navController = navController,
                     navBack = { finish() },
@@ -52,8 +47,8 @@ class GapiActivity : FragmentActivity() {
     private fun syncProgram() {
         SyncDialog(
             activity = this@GapiActivity,
-            recordUid = viewModel.program.value,
-            syncContext = SyncContext.TrackerProgram(viewModel.program.value),
+            recordUid = viewModel.program,
+            syncContext = SyncContext.TrackerProgram(viewModel.program),
             onNoConnectionListener = {
                 Snackbar.make(
                     this.window.decorView.rootView,

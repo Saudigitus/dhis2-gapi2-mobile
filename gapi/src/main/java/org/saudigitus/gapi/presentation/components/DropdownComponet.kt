@@ -36,8 +36,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
@@ -78,7 +76,7 @@ fun DropDownOu(
     modifier: Modifier = Modifier,
     placeholder: String,
     leadingIcon: ImageVector,
-    selectedSchool: OU? = null,
+    selectedOu: OU? = null,
     program: String,
     onItemClick: (OU) -> Unit,
 ) {
@@ -89,9 +87,9 @@ fun DropDownOu(
     if (interactionSource.collectIsPressedAsState().value) {
         launchOuTreeSelector(
             supportFragmentManager = fragmentManager!!,
-            selectedSchool = selectedSchool,
+            selectedOu = selectedOu,
             program = program,
-            onSchoolSelected = {
+            onOuSelected = {
                 onItemClick.invoke(it)
             },
         )
@@ -109,7 +107,7 @@ fun DropDownOu(
                 )
                 .background(color = Color.White, shape = RoundedCornerShape(30.dp)),
             shape = RoundedCornerShape(30.dp),
-            value = selectedSchool?.displayName ?: "",
+            value = selectedOu?.displayName ?: "",
             onValueChange = {},
             singleLine = true,
             readOnly = true,
@@ -125,9 +123,9 @@ fun DropDownOu(
                 IconButton(onClick = {
                     launchOuTreeSelector(
                         supportFragmentManager = fragmentManager!!,
-                        selectedSchool = selectedSchool,
+                        selectedOu = selectedOu,
                         program = program,
-                        onSchoolSelected = {
+                        onOuSelected = {
                             onItemClick.invoke(it)
                         },
                     )
@@ -150,20 +148,20 @@ fun DropDownOu(
 
 fun launchOuTreeSelector(
     supportFragmentManager: FragmentManager,
-    selectedSchool: OU? = null,
+    selectedOu: OU? = null,
     program: String,
-    onSchoolSelected: (school: OU) -> Unit,
+    onOuSelected: (school: OU) -> Unit,
 ) {
     OUTreeFragment.Builder()
         .singleSelection()
         .orgUnitScope(OrgUnitSelectorScope.ProgramCaptureScope(program))
         .withPreselectedOrgUnits(
-            selectedSchool?.let { listOf(it.uid) } ?: emptyList(),
+            selectedOu?.let { listOf(it.uid) } ?: emptyList(),
         )
         .onSelection { selectedOrgUnits ->
             val selectedOrgUnit = selectedOrgUnits.firstOrNull()
             if (selectedOrgUnit != null) {
-                onSchoolSelected(
+                onOuSelected(
                     OU(
                         uid = selectedOrgUnit.uid(),
                         displayName = selectedOrgUnit.displayName(),
