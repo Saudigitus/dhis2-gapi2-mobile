@@ -18,6 +18,8 @@ import org.dhis2.commons.sync.SyncDialog
 import org.hisp.dhis.mobile.ui.designsystem.theme.DHIS2Theme
 import org.saudigitus.gapi.R
 import org.saudigitus.gapi.presentation.screens.dashboard.DashboardViewModel
+import org.saudigitus.gapi.presentation.screens.form.FormScreen
+import org.saudigitus.gapi.presentation.screens.form.FormViewModel
 import org.saudigitus.gapi.presentation.screens.home.HomeRoute
 import org.saudigitus.gapi.presentation.screens.home.HomeViewModel
 import org.saudigitus.gapi.presentation.screens.nav.AppNavigator
@@ -28,6 +30,7 @@ class GapiActivity : FragmentActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
     private val dashboardViewModel: DashboardViewModel by viewModels()
+    private val formViewModel: FormViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +38,19 @@ class GapiActivity : FragmentActivity() {
         setContent {
             val navController = rememberNavController()
             val searchTeiModel by dashboardViewModel.searchTeiModel.collectAsStateWithLifecycle()
+            val options by formViewModel.options.collectAsStateWithLifecycle()
 
             GapiAndroidTheme(
                 dynamicColor = false,
                 darkTheme = false,
             ) {
-                HomeRoute(
+                /*HomeRoute(
                     viewModel = viewModel,
                     navController = navController,
                     navBack = { finish() },
                     sync = ::syncProgram,
                     onTeiClick = ::launchTeiDashboard,
-                )
+                )*/
             }
         }
     }

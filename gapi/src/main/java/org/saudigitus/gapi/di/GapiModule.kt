@@ -9,8 +9,10 @@ import dagger.hilt.components.SingletonComponent
 import org.dhis2.commons.network.NetworkUtils
 import org.dhis2.commons.resources.ResourceManager
 import org.hisp.dhis.android.core.D2
+import org.saudigitus.gapi.data.local.FormRepository
 import org.saudigitus.gapi.data.local.ProgramRepository
 import org.saudigitus.gapi.data.local.TeiRepository
+import org.saudigitus.gapi.data.local.repository.FormRepositoryImpl
 import org.saudigitus.gapi.data.local.repository.ProgramRepositoryImpl
 import org.saudigitus.gapi.data.local.repository.TeiRepositoryImpl
 import org.saudigitus.gapi.presentation.screens.teis.mapper.TEICardMapper
@@ -45,4 +47,10 @@ object GapiModule {
         d2: D2,
         teiRepository: TeiRepository,
     ): ProgramRepository = ProgramRepositoryImpl(d2, teiRepository)
+
+    @Provides
+    @Singleton
+    fun providesFormRepository(
+        d2: D2,
+    ): FormRepository = FormRepositoryImpl(d2)
 }
