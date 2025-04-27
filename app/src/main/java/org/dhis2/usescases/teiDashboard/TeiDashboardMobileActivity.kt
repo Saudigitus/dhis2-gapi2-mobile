@@ -85,13 +85,15 @@ import org.dhis2.utils.isPortrait
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus
 import org.hisp.dhis.mobile.ui.designsystem.component.navigationBar.NavigationBar
 import org.hisp.dhis.mobile.ui.designsystem.theme.DHIS2Theme
+import org.saudigitus.gapi.presentation.screens.nav.TeiDashboardComponentProvider
 import javax.inject.Inject
 
 class TeiDashboardMobileActivity :
     ActivityGlobalAbstract(),
     TeiDashboardContracts.View,
     MapButtonObservable,
-    TEIDataActivityContract {
+    TEIDataActivityContract,
+    TeiDashboardComponentProvider {
     private var currentOrientation = -1
 
     @Inject
@@ -130,6 +132,7 @@ class TeiDashboardMobileActivity :
     lateinit var programModel: DashboardProgramModel
     var teiUid: String? = null
     var programUid: String? = null
+    var benefitEntity: String? = null
     var enrollmentUid: String? = null
     lateinit var binding: ActivityDashboardMobileBinding
     private lateinit var dashboardViewModel: DashboardViewModel
@@ -164,9 +167,10 @@ class TeiDashboardMobileActivity :
                     startActivity(
                         intent(
                             this,
-                            teiUid,
-                            dataIntent.getStringExtra(CHANGE_PROGRAM),
-                            dataIntent.getStringExtra(CHANGE_PROGRAM_ENROLLMENT),
+                            teiUid = teiUid,
+                            programUid = dataIntent.getStringExtra(CHANGE_PROGRAM),
+                            enrollmentUid = dataIntent.getStringExtra(CHANGE_PROGRAM_ENROLLMENT),
+
                         ),
                     )
                     finish()
@@ -179,9 +183,11 @@ class TeiDashboardMobileActivity :
         if (savedInstanceState != null && savedInstanceState.containsKey(Constants.TRACKED_ENTITY_INSTANCE)) {
             teiUid = savedInstanceState.getString(Constants.TRACKED_ENTITY_INSTANCE)
             programUid = savedInstanceState.getString(Constants.PROGRAM_UID)
+            benefitEntity = savedInstanceState.getString(Constants.BENEFIT_ENTITY)
         } else {
             teiUid = intent.getStringExtra(TEI_UID)
             programUid = intent.getStringExtra(Constants.PROGRAM_UID)
+            benefitEntity = intent.getStringExtra(Constants.BENEFIT_ENTITY)
             enrollmentUid = intent.getStringExtra(Constants.ENROLLMENT_UID)
         }
         (applicationContext as App).createDashboardComponent(
@@ -363,7 +369,7 @@ class TeiDashboardMobileActivity :
     private fun navigateToFragment(item: TEIDashboardItems) {
         val fragment = when (item) {
             TEIDashboardItems.DETAILS -> newInstance(
-                programUid,
+                benefitEntity,
                 teiUid,
                 enrollmentUid,
             )
@@ -528,7 +534,7 @@ class TeiDashboardMobileActivity :
 
     private fun handleEnrollmentDeletion(hasMoreEnrollments: Boolean) {
         if (hasMoreEnrollments) {
-            startActivity(intent(this, teiUid, null, null))
+            startActivity(intent(this, teiUid, null,  null))
             finish()
         } else {
             finish()
@@ -806,6 +812,22 @@ class TeiDashboardMobileActivity :
             intent.putExtra(Constants.ENROLLMENT_UID, enrollmentUid)
             return intent
         }
+
+        @JvmStatic
+        fun intent(
+            context: Context?,
+            teiUid: String?,
+            programUid: String?,
+            benefitEntity: String?,
+            enrollmentUid: String?,
+        ): Intent {
+            val intent = Intent(context, TeiDashboardMobileActivity::class.java)
+            intent.putExtra(TEI_UID, teiUid)
+            intent.putExtra(Constants.PROGRAM_UID, programUid)
+            intent.putExtra(Constants.BENEFIT_ENTITY, benefitEntity)
+            intent.putExtra(Constants.ENROLLMENT_UID, enrollmentUid)
+            return intent
+        }
     }
 
     private fun setupMoreOptionsMenu() {
@@ -856,6 +878,22 @@ class TeiDashboardMobileActivity :
                 }
             }
         }
+    }
+
+    override fun launch(
+        context: Context,
+        teiUid: String?,
+        programUid: String?,
+        benefitEntity: String?,
+        enrollmentUid: String?
+    ): Intent {
+        return intent(
+            context,
+            teiUid,
+            programUid,
+            benefitEntity,
+            enrollmentUid,
+        )
     }
 }
 

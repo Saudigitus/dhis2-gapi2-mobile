@@ -61,6 +61,32 @@ class TeiRepositoryImpl
         }
     }
 
+    override suspend fun getTeiByName(
+        program: String,
+        attributeId: String,
+        name: String
+    ) = withContext(Dispatchers.IO) {
+        val repository = d2.trackedEntityModule().trackedEntityInstanceQuery()
+
+        return@withContext if (networkUtils.isOnline()) {
+            val tei = repository.onlineFirst().allowOnlineCache().eq(true)
+                .byProgram().eq(program)
+                .byFilter(attributeId).eq(name)
+                .one()
+                .blockingGet()
+
+            transform(tei, program)
+        } else {
+            val tei = repository.offlineOnly().allowOnlineCache().eq(false)
+                .byProgram().eq(program)
+                .byFilter(attributeId).eq(name)
+                .one()
+                .blockingGet()
+
+            transform(tei, program)
+        }
+    }
+
     fun transform(
         tei: TrackedEntityInstance?,
         program: String?,

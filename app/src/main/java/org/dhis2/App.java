@@ -46,6 +46,7 @@ import org.dhis2.usescases.crash.CrashActivity;
 import org.dhis2.usescases.login.LoginComponent;
 import org.dhis2.usescases.login.LoginModule;
 import org.dhis2.usescases.teiDashboard.TeiDashboardComponent;
+import org.dhis2.usescases.teiDashboard.TeiDashboardMobileActivity;
 import org.dhis2.usescases.teiDashboard.TeiDashboardModule;
 import org.dhis2.utils.analytics.AnalyticsModule;
 import org.dhis2.utils.granularsync.SyncStatusDialogProvider;
@@ -55,6 +56,7 @@ import org.dhis2.utils.timber.DebugTree;
 import org.hisp.dhis.android.core.D2Manager;
 import org.hisp.dhis.android.core.datastore.KeyValuePair;
 import org.jetbrains.annotations.NotNull;
+import org.saudigitus.gapi.presentation.screens.nav.TeiDashboardComponentProvider;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -400,4 +402,9 @@ public class App extends MultiDexApplication implements Components, LifecycleObs
         return granted != null && Boolean.parseBoolean(granted.value());
     }
 
+    @NonNull
+    @Override
+    public TeiDashboardComponentProvider getDashboard() {
+        return new TeiDashboardMobileActivity();
+    }
 }

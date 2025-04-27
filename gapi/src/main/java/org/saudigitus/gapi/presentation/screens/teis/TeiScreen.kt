@@ -1,5 +1,6 @@
-package org.saudigitus.gapi.presentation.screens.home
+package org.saudigitus.gapi.presentation.screens.teis
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountTree
-import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,33 +22,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import org.saudigitus.gapi.R
-import org.saudigitus.gapi.presentation.components.DropDown
 import org.saudigitus.gapi.presentation.components.DropDownOu
 import org.saudigitus.gapi.presentation.components.TEIList
 import org.saudigitus.gapi.presentation.components.Toolbar
 import org.saudigitus.gapi.presentation.components.ToolbarActionState
-import org.saudigitus.gapi.presentation.models.FilterType
 
 @Composable
-fun HomeRoute(
-    viewModel: HomeViewModel,
-    navController: NavHostController,
-    navBack: () -> Unit,
-    sync: () -> Unit,
-    onTeiClick: (tei: String, enrollment: String) -> Unit,
+fun TeiScreen(
+    viewModel: TeiViewModel,
+    onSyncClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeUI(uiState = uiState) {
-        when (it) {
-            is HomeUiEvent.OnBack -> navBack()
-            is HomeUiEvent.NavTo -> navController.navigate(it.route)
-            is HomeUiEvent.Sync -> sync()
-            is HomeUiEvent.OnTeiClick -> {
-                onTeiClick.invoke(it.tei, it.enrollment)
-            }
+    TeiUI(uiState) {
+        when(it) {
+            is TeiUiEvent.OnSyncClick -> { onSyncClick() }
+            is TeiUiEvent.OnBackClick -> { onBackClick() }
             else -> {
                 viewModel.onUIEvent(it)
             }
@@ -56,11 +47,12 @@ fun HomeRoute(
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeUI(
-    uiState: HomeUiState,
-    onEvent: (HomeUiEvent) -> Unit,
+private fun TeiUI(
+    uiState: TeiUiState,
+    uiEvent: (TeiUiEvent) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -72,16 +64,13 @@ fun HomeUI(
                     titleContentColor = Color.White,
                     actionIconContentColor = Color.White,
                 ),
-                navigationAction = { onEvent(HomeUiEvent.OnBack) },
+                navigationAction = { uiEvent(TeiUiEvent.OnBackClick) },
                 disableNavigation = false,
                 actionState = ToolbarActionState(
                     syncVisibility = true,
-                    showFavorite = true,
+                    showFavorite = false,
                 ),
-                filterAction = {
-                    onEvent(HomeUiEvent.HideShowFilter)
-                },
-                syncAction = { onEvent(HomeUiEvent.Sync) },
+                syncAction = { uiEvent(TeiUiEvent.OnSyncClick) },
             )
         },
     ) { paddingValues ->
@@ -105,17 +94,9 @@ fun HomeUI(
                         selectedOu = uiState.orgUnit,
                         program = uiState.program,
                         onItemClick = {
-                            onEvent(HomeUiEvent.OnFilterChange(FilterType.OU, it))
+                            uiEvent(TeiUiEvent.OnOuChange(it))
                         },
                     )
-
-                    DropDown(
-                        placeholder = stringResource(R.string.project),
-                        leadingIcon = Icons.Default.Task,
-                        data = uiState.projects
-                    ) {
-
-                    }
                 }
             }
 
@@ -138,7 +119,7 @@ fun HomeUI(
                 TEIList(
                     teiCardMapper = uiState.teiCardMapper,
                     teis = uiState.teis,
-                    onCardClick = { tei, enrollment -> onEvent(HomeUiEvent.OnTeiClick(tei, enrollment)) }
+                    onCardClick = { tei, enrollment -> uiEvent(TeiUiEvent.OnTeiClick(tei, enrollment)) }
                 )
             }
         }

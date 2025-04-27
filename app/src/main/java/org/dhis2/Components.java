@@ -12,6 +12,7 @@ import org.dhis2.data.server.ServerComponent;
 import org.dhis2.data.user.UserComponent;
 import org.dhis2.usescases.login.LoginComponent;
 import org.dhis2.usescases.login.LoginModule;
+import org.saudigitus.gapi.presentation.screens.nav.NavigatorComponentProvider;
 
 import dhis2.org.analytics.charts.di.AnalyticsComponentProvider;
 
@@ -20,7 +21,8 @@ public interface Components extends FeatureConfigComponentProvider,
         CalendarPickerComponentProvider,
         FilterPresenterProvider,
         OUTreeComponentProvider,
-        ComponentProvider {
+        ComponentProvider,
+        NavigatorComponentProvider {
 
     @NonNull
     AppComponent appComponent();

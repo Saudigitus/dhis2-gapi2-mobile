@@ -5,7 +5,6 @@ import androidx.compose.runtime.Stable
 import org.saudigitus.gapi.data.models.OU
 import org.saudigitus.gapi.data.models.Project
 import org.saudigitus.gapi.data.models.SearchTeiModel
-import org.saudigitus.gapi.presentation.components.DropdownItem
 import org.saudigitus.gapi.presentation.components.ToolbarHeaders
 import org.saudigitus.gapi.presentation.screens.teis.mapper.TEICardMapper
 
