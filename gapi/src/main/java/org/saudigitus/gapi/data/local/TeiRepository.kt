@@ -9,4 +9,5 @@ interface TeiRepository {
     ): List<SearchTeiModel>
 
     suspend fun getTei(program: String): List<SearchTeiModel>
+    suspend fun getTeiByName(program: String, attributeId: String, name: String): SearchTeiModel
 }

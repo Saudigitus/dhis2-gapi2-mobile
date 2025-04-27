@@ -82,6 +82,7 @@ public class Constants {
     public static final String EVENT_SCHEDULE_INTERVAL = "EVENT_SCHEDULE_INTERVAL";
     public static final String TRACKED_ENTITY_INSTANCE = "TRACKED_ENTITY_INSTANCE";
     public static final String PROGRAM_UID = "PROGRAM_UID";
+    public static final String BENEFIT_ENTITY = "BENEFIT_ENTITY";
     public static final String ORG_UNIT = "ORG_UNIT";
     public static final String ORG_UNIT_NAME = "ORG_UNIT_NAME";
     public static final String ENROLLMENT_UID = "ENROLLMENT_UID";

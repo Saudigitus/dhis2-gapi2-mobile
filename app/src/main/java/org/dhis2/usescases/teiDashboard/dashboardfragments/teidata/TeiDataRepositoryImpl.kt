@@ -158,7 +158,7 @@ class TeiDataRepositoryImpl(
         val eventViewModels = mutableListOf<EventViewModel>()
         var eventRepo: EventCollectionRepository
         val maxEventToShow = 3
-        val program = programUid?.let { d2.program(programUid) }
+        val program = programUid?.let { d2.program("LYuP7aPXzKT") }
 
         return d2.programModule().programStages()
             .byProgramUid().eq(programUid)

@@ -1,12 +1,10 @@
-package org.saudigitus.gapi.presentation.screens.home
+package org.saudigitus.gapi.presentation.screens.teis
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,21 +15,19 @@ import org.saudigitus.gapi.presentation.screens.teis.mapper.TEICardMapper
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel
+class TeiViewModel
 @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    teiCardMapper: TEICardMapper,
     private val teiRepository: TeiRepository,
     private val programRepository: ProgramRepository,
-) : ViewModel() {
-
+    private val teiCardMapper: TEICardMapper,
+): ViewModel() {
     private val viewModelState = MutableStateFlow(
-        HomeUiState(
+        TeiUiState(
             toolbarHeaders = ToolbarHeaders(
-                title = "Home",
+                title = "Benefits",
             ),
             teiCardMapper = teiCardMapper,
-            program = savedStateHandle.get<String>("program") ?: "nuHKtpbanxV",
+            program = "LYuP7aPXzKT"
         ),
     )
 
@@ -42,21 +38,13 @@ class HomeViewModel
             viewModelState.value,
         )
 
-    val program = savedStateHandle.get<String>("program") ?: "nuHKtpbanxV"
-
     init {
         viewModelScope.launch {
             viewModelState.update {
-                it.copy(
-                    projects = programRepository.projects("YnhxSSlar5j"),
-                    teis = teiRepository.getBenefits("rsqRHZcoQis", program),
-                )
+                it.copy(teis = teiRepository.getBenefits("rsqRHZcoQis", "LYuP7aPXzKT"))
             }
         }
     }
 
-
-
-    fun onUIEvent(uiEvent: HomeUiEvent) = Unit
-
+    fun onUIEvent(uiEvent: TeiUiEvent) = Unit
 }

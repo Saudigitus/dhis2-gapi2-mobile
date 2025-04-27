@@ -1,5 +1,8 @@
 package org.dhis2.usescases.teiDashboard.dashboardfragments.teidata.teievents;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -64,6 +67,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(EventViewModel eventModel, Enrollment enrollment, @NotNull Function0<Unit> toggleList) {
         Event event = eventModel.getEvent();
+        binding.getRoot().setVisibility(GONE);
         binding.setEvent(eventModel.getEvent());
         binding.setStage(eventModel.getStage());
         binding.setEnrollment(enrollment);
@@ -74,16 +78,16 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
             binding.eventCard.setCardBackgroundColor(
                     ContextCompat.getColor(itemView.getContext(),
                             program.programType() == ProgramType.WITH_REGISTRATION ? R.color.form_field_background : R.color.white));
-            binding.programStageName.setVisibility(View.GONE);
-            binding.composeStageIcon.setVisibility(View.INVISIBLE);
-            binding.stageIconStatusImage.setVisibility(View.INVISIBLE);
+            binding.programStageName.setVisibility(GONE);
+            binding.composeStageIcon.setVisibility(INVISIBLE);
+            binding.stageIconStatusImage.setVisibility(INVISIBLE);
             binding.eventStatus.setVisibility(View.VISIBLE);
         } else {
             binding.eventCard.setCardBackgroundColor(Color.WHITE);
             binding.programStageName.setVisibility(View.VISIBLE);
             binding.composeStageIcon.setVisibility(View.VISIBLE);
             binding.stageIconStatusImage.setVisibility(View.VISIBLE);
-            binding.eventStatus.setVisibility(View.GONE);
+            binding.eventStatus.setVisibility(GONE);
             renderStageIcon(eventModel.getMetadataIconData());
         }
 
@@ -95,7 +99,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
             binding.catCombo.setVisibility(View.VISIBLE);
             binding.catCombo.setText(eventModel.getCatComboName());
         } else {
-            binding.catCombo.setVisibility(View.GONE);
+            binding.catCombo.setVisibility(GONE);
         }
 
         if (eventModel.getDataElementValues() != null && !eventModel.getDataElementValues().isEmpty()) {
@@ -132,9 +136,9 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void hideEventValueLayout() {
-        binding.showValuesButton.setVisibility(View.GONE);
-        binding.dataElementListGuideline.setVisibility(View.INVISIBLE);
-        binding.dataElementList.setVisibility(View.GONE);
+        binding.showValuesButton.setVisibility(GONE);
+        binding.dataElementListGuideline.setVisibility(INVISIBLE);
+        binding.dataElementList.setVisibility(GONE);
         binding.showValuesButton.setOnClickListener(null);
     }
 
@@ -168,8 +172,8 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
                 binding.dataElementList.addView(fieldValueBinding.getRoot());
             }
         } else {
-            binding.dataElementListGuideline.setVisibility(View.INVISIBLE);
-            binding.dataElementList.setVisibility(View.GONE);
+            binding.dataElementListGuideline.setVisibility(INVISIBLE);
+            binding.dataElementList.setVisibility(GONE);
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
             for (Pair<String, String> nameValuePair : dataElementValues) {
                 if (nameValuePair.component2() != null && !Objects.equals(nameValuePair.component2(), "-")) {
@@ -193,7 +197,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void showShadows(EventViewModel eventViewModel) {
-        binding.shadowTop.setVisibility(eventViewModel.getGroupedByStage() && eventViewModel.getShowTopShadow() ? View.VISIBLE : View.GONE);
-        binding.shadowBottom.setVisibility(eventViewModel.getGroupedByStage() && eventViewModel.getShowBottomShadow() ? View.VISIBLE : View.GONE);
+        binding.shadowTop.setVisibility(eventViewModel.getGroupedByStage() && eventViewModel.getShowTopShadow() ? View.VISIBLE : GONE);
+        binding.shadowBottom.setVisibility(eventViewModel.getGroupedByStage() && eventViewModel.getShowBottomShadow() ? View.VISIBLE : GONE);
     }
 }
